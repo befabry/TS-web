@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "typescript": "^3.9.7"
+  },
+  "name": "web",
+  "description": "TS web framework to learn",
+  "version": "1.0.0",
+  "main": "index.html",
+  "dependencies": {},
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "author": "",
+  "license": "ISC"
+}
