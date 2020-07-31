@@ -1,25 +1,16 @@
+import { Eventing } from "./Eventing";
+
 interface UserProps {
+  id?: number;
   name?: string;
   age?: number;
 }
 
-//A function that takes no argument and return nothing
-type EventCallback = () => void;
-
 export class User {
-  /**
-   * An object with multiple properties associated to an array of Callbacks
-   *
-   *  {
-   *      'click' : [Callback, Callback]
-   *      'hover' : []
-   *      'mouseenter' : [Callback, Callback]
-   *  }
-   */
-  events: { [key: string]: EventCallback[] };
+  public events: Eventing;
 
   constructor(private data: UserProps) {
-    this.events = {};
+    this.events = new Eventing();
   }
 
   get(propName: string): number | string {
@@ -28,12 +19,5 @@ export class User {
 
   set(update: UserProps): void {
     Object.assign(this.data, update);
-  }
-
-  on(eventName: string, callback: EventCallback): void {
-    //similar to ?? but works with undefined or falsy values
-    const handlers = this.events[eventName] || [];
-    handlers.push(callback);
-    this.events[eventName] = handlers;
   }
 }
