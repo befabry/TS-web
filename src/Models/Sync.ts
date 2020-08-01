@@ -1,23 +1,23 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosPromise } from "axios";
 
-export class Sync {
-  fetch(): void {
-    if (this.get("id") === undefined) {
-      throw new Error("The User has no id property");
-    }
+interface HasId {
+  id?: number;
+}
 
-    axios
-      .get(`http://localhost:3000/users/${this.get("id")}`)
-      .then((response: AxiosResponse): void => {
-        this.set(response.data);
-      });
+export class Sync<T extends HasId> {
+  constructor(public rootUrl: string) {}
+
+  fetch(id: number): AxiosPromise {
+    return axios.get(`${this.rootUrl}/${id}`);
   }
 
-  save(): void {
-    if (this.get("id")) {
-      axios.put(`http://localhost:3000/users/${this.get("id")}`, this.data);
+  save(data: T): AxiosPromise {
+    const { id } = data;
+
+    if (id) {
+      return axios.put(`${this.rootUrl}/${id}`, data);
     } else {
-      axios.post("http://localhost:3000/users", this.data);
+      return axios.post(this.rootUrl, data);
     }
   }
 }
