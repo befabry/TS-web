@@ -17,14 +17,13 @@ export class Eventing {
     this.events = {};
   }
 
-  on(eventName: string, callback: EventCallback): void {
-    //similar to ?? but works with undefined or falsy values
-    const handlers = this.events[eventName] || [];
+  on = (eventName: string, callback: EventCallback): void => {
+    const handlers = this.events[eventName] ?? [];
     handlers.push(callback);
     this.events[eventName] = handlers;
-  }
+  };
 
-  trigger(eventName: string): void {
+  trigger = (eventName: string): void => {
     const handlers = this.events[eventName];
     if (!handlers || handlers.length === 0) {
       return;
@@ -33,5 +32,5 @@ export class Eventing {
     handlers.forEach((callback) => {
       callback();
     });
-  }
+  };
 }
