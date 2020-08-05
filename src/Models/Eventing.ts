@@ -1,7 +1,6 @@
-//A function that takes no argument and return nothing
-type EventCallback = () => void;
+import type { EventCallback, Events } from "./Model";
 
-export class Eventing {
+export class Eventing implements Events {
   /**
    * An object with multiple properties associated to an array of Callbacks
    *
