@@ -22,9 +22,9 @@ export class User extends Model<UserProps> {
   }
 
   static buildCollection(): Collection<User, UserProps> {
-    return new Collection<User, UserProps>(rootUrl, (json: UserProps) =>
-      User.build(json)
-    );
+    return new Collection<User, UserProps>(rootUrl, (json: UserProps) => {
+      return User.build(json);
+    });
   }
 
   setRandomAge(): void {

@@ -1,23 +1,24 @@
-import { User } from "../Models/User";
+import { User, UserProps } from "../Models/User";
+import { View } from "./View";
 
-export class UserForm {
-  constructor(public parent: Element, public model: User) {
-    this.bindModel();
+export class UserForm extends View<User, UserProps> {
+  constructor(parent: Element, model: User) {
+    super(parent, model);
     this.onSetAgeClick = this.onSetAgeClick.bind(this);
     this.onSetNameClick = this.onSetNameClick.bind(this);
-  }
-
-  bindModel(): void {
-    this.model.on("change", () => {
-      this.render();
-    });
+    this.onSaveModel = this.onSaveModel.bind(this);
   }
 
   eventsMap(): { [key: string]: () => void } {
     return {
       "click:.set-age": this.onSetAgeClick,
       "click:.set-name": this.onSetNameClick,
+      "click:.save-model": this.onSaveModel,
     };
+  }
+
+  onSaveModel(): void {
+    this.model.save();
   }
 
   onSetAgeClick(): void {
@@ -36,38 +37,11 @@ export class UserForm {
   template(): string {
     return `
       <div>
-        <h1>User Form</h1>
-        <p>
-          User name: ${this.model.get("name")} <br />
-          User age: ${this.model.get("age")}
-        </p>
         <input placeholder="${this.model.get("name")}" />
         <button class="set-name">Change Name</button>
         <button class="set-age">Set Random Age</button>
+        <button class="save-model">Save User</button>
       </div>
     `;
-  }
-
-  bindEvents(fragment: DocumentFragment): void {
-    const eventsMap = this.eventsMap();
-
-    for (let eventKey in eventsMap) {
-      const [eventName, selector] = eventKey.split(":");
-
-      fragment.querySelectorAll(selector).forEach((element) => {
-        element.addEventListener(eventName, eventsMap[eventKey]);
-      });
-    }
-  }
-
-  render(): void {
-    this.parent.innerHTML = "";
-
-    const templateElement = document.createElement("template");
-    templateElement.innerHTML = this.template();
-
-    this.bindEvents(templateElement.content);
-
-    this.parent.append(templateElement.content);
   }
 }
